@@ -1,16 +1,19 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import*
-
+from file_helper import*
 
 app = QApplication([])
 
+notes = read_from_file()
+
+
 app.setStyleSheet("""
         QPushButton{
-            background-color: #66ff00;
-            color: red;
+            background-color: #FFFF00;
+            color: black;
         }
         QLabel{
-            background-color: red;
+            background-color: blue;
             color: white;
         }
     """)
@@ -23,6 +26,7 @@ h2 = QVBoxLayout()
 text_field = QTextEdit()
 notes_list_lbl = QLabel("Список заміток")
 notes_list = QListWidget()
+notes_list.addItems(notes)
 h3 = QHBoxLayout()
 create = QPushButton("Створити замітку")
 remove = QPushButton("Видалити замітку")
@@ -52,6 +56,14 @@ h4.addWidget(unplug)
 h2.addLayout(h4)
 h2.addWidget(search)
 main_line.addLayout(h2)
+
+def show_note():
+    key = notes_list.currentItem().text()
+    text_field.setText(notes[key]["текст"])
+    tags_list.clear()
+    tags_list.addItems(notes[key]["теги"])
+
+notes_list.itemClicked.connect(show_note)
 
 
 
