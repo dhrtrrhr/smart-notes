@@ -65,8 +65,55 @@ def show_note():
 
 notes_list.itemClicked.connect(show_note)
 
+def add_note():
+    note_name, ok = QInputDialog.getText(window,"Нова нотатка","Введіть назву нотатки ")
+
+    if ok == True:
+        notes[note_name] = {
+            "текст": "",
+            "теги": [
+
+            ]
+        }
 
 
+        notes_list.clear()
+        notes_list.addItems(notes)
+        write_in_file(notes)
+
+def save_note_funk():
+    text = text_field.toPlainText()
+    if text:
+
+        note_key = notes_list.currentItem().text()
+        notes[note_key]["текст"] = text
+        write_in_file(notes)
+
+save.clicked.connect(save_note_funk)
+
+
+def remove_funk():
+    note_key = notes_list.currentItem().text()
+    notes.pop(note_key)
+    notes_list.clear()
+    notes_list.addItems(notes)
+    write_in_file(notes)
+
+remove.clicked.connect(remove_funk)
+
+def add_tag():
+    text = tag_line.text()
+    note_key = notes_list.currentItem().text()
+    notes[note_key]["теги"].append(text)
+    write_in_file(notes)
+    tags_list.clear()
+    tags_list.addItems(notes[note_key]["теги"])
+
+add.clicked.connect(add_tag)
+
+
+
+create.clicked.connect(add_note)
 window.setLayout(main_line)
 window.show()
 app.exec()
